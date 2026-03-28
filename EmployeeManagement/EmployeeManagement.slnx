@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../EmployeeData/EmployeeData.csproj" />
+  <Project Path="../EmployeeManagementAPI/EmployeeManagementAPI.csproj" />
+  <Project Path="../EmployeeServices/EmployeeServices.csproj" />
+  <Project Path="../EmployeeTest/EmployeeTest.csproj" />
+  <Project Path="EmployeeManagement.csproj" />
+</Solution>

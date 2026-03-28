@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "Create Employee";
+}
+<h4>Create Employee</h4>
+<br />
+
+<style>
+    .required-fields{
+        color:red;
+    }
+</style>
+<div class="row">
+    <form asp-controller="Employee" asp-action="CreateEmployee" method="post" id="EmployeeForm">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="EmployeeName" class="form-label">Employee Name <span class="required-fields">*</span></label>
+                <input id="EmployeeName" name="EmployeeName" type="text" class="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <label for="EmailAddress" class="form-label">Email Address <span class="required-fields">*</span></label>
+                <input id="EmailAddress" name="EmailAddress" type="text" class="form-control"   />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Designation <span class="required-fields">*</span></label>
+                <input type="text" id="Designation" name="Designation" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">MobilePhone</label>
+                <input type="text" id="MobilePhone" name="MobilePhone" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">DateOfBirth <span class="required-fields">*</span></label>
+                <input type="date" id="DateOfBirth" name="DateOfBirth" class="form-control" />
+            </div> 
+            <div class="col-md-4">
+                <label class="form-label">Nationality</label>
+                <input type="text" id="Nationality" name="Nationality" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <br />
+                <label class="form-check-label">IsActive</label>
+                <input type="checkbox" id="IsActive" name="IsActive" class="form-check-input" />
+                </div>
+            <input type="hidden" name="EmployeeId" id="EmployeeId" />
+            <div class="col-md-8" style="text-align:right;">
+                <br /></ br>
+                <button type="button" class="btn btn-primary" onclick="employee.CreateEmployee();">Submit</button>
+            </div>
+        </div>
+        </form>
+</div>
+<div class="row">
+    
+    <div class="col-md-12">
+        <h4>Employee List</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Employee Name</td>
+                    <td>Designation</td>
+                    <td>EmailAddress</td>
+                    <td>MobilePhone</td>
+                    <td>DateOfBirth</td>
+                    <td>Nationality</td>
+                    <td>IsActive</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody id="EmployeeTable">
+               
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    var employee={
+            CreateEmployee:function(){ 
+                var active=false;
+                if($("#IsActive").val()=="on")
+                {
+                    active=true;
+                }
+                var data={
+                    EmployeeId:$("#EmployeeId").val(),
+                    EmployeeName:$("#EmployeeName").val(),
+                    EmailAddress:$("#EmailAddress").val(),
+                    Designation:$("#Designation").val() ,
+                    MobilePhone:$("#MobilePhone").val(),
+                    DateOfBirth:$("#DateOfBirth").val() ,
+                    Nationality:$("#Nationality").val(),
+                    IsActive:active
+                } 
+                var regex=/^[0-9]+$/;
+                var Emailregex=/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                if(!$("#EmailAddress").val() ||!$("#EmployeeName").val() || !$("#Designation").val() || !$("#DateOfBirth").val() )
+                {   alert("Please fill required fields.");
+                    return false
+                }
+
+                if(!regex.test( $("#MobilePhone").val())){
+                    alert("Moble number not valid.");
+                    return false
+                }
+                debugger
+                if(!Emailregex.test($("#EmailAddress").val())){
+                    alert("Email address not valid.");
+                    return false
+                }
+
+
+                var today = new Date();
+                var birthDate = new Date($("#DateOfBirth").val());
+                var age = today.getFullYear() - birthDate.getFullYear(); 
+                if(age < 18) {
+                    alert("Employee must be at least 18 years old");
+                    return;
+                } 
+                    $.ajax({
+                    url:"/Employee/CreateEmployee",
+                    type:"POST",
+                    data: data,
+                    success:function(response){
+                        debugger
+                        if(response.status){
+                            alert("Employee created successfully");
+                            employee.EmployeeList();
+                        }
+                    },
+                    error:function(error){
+                        alert("Error while creating employee");
+                    }
+                });
+               
+            },
+           EmployeeList:function(){ 
+                $.ajax({
+                    url:"/Employee/GetEmployeeList",
+                    type:"GET", 
+                    success:function(data){
+                        debugger
+                         $("#EmployeeTable").html("");
+                        var tbody=``;
+                        $.each(data.data,function(){
+                            tbody+=`
+                             <tr>
+                                <td>`+this.employeeId+`</td>
+                                <td>`+this.employeeName+`</td>
+                                <td>`+this.designation+`</td>
+                                <td>`+this.emailAddress+`</td>
+                                <td>`+this.mobilePhone+`</td>
+                                <td>`+this.dateOfBirth+`</td>
+                                <td>`+this.nationality+`</td>
+                                <td>`+this.isActive+`</td>
+                                <td>
+                                    <span><a class=" " onclick="employee.EmployeeById(`+this.employeeId+`);" >Edit</a></span>
+                                    <span><a class=" " onclick="employee.DeleteEmployee(`+this.employeeId+`);" >Delete</a></span>
+                                </td>
+                            </tr>
+                            `;
+                        });
+                        $("#EmployeeTable").append(tbody);
+                         
+                    },
+                    error:function(error){
+                        alert("Error while creating employee");
+                    }
+                });
+           },
+           EmployeeById:function(Id){
+                $.ajax({
+                    url:"/Employee/GetEmployeeById",
+                    type:"GET",
+                    data:{Id:Id},
+                    success:function(data){
+                         
+                          $("#EmployeeId").val(data.data.employeeId);
+                          $("#EmployeeName").val(data.data.employeeName);
+                          $("#EmailAddress").val(data.data.emailAddress);
+                          $("#Designation").val(data.data.designation);
+                          $("#DateOfBirth").val(data.data.dateOfBirth); 
+                          $("#Nationality").val(data.data.nationality);
+                          $("#MobilePhone").val(data.data.mobilePhone); 
+                          $("#IsActive").prop("checked",data.data.isActive);
+
+
+                          
+                    },
+                    error:function(error){
+                        alert("Error while creating employee");
+                    }
+                });
+           },
+           DeleteEmployee:function(Id){
+               
+               if(!confirm("Are you sure?")){
+                   return false;
+               }
+
+                $.ajax({
+                    url:"/Employee/DeleteEmployee",
+                    type:"GET",
+                    data:{Id:Id},
+                    success:function(response){
+                         if(response.status==true){
+                            alert("Employee deleted successfully");
+                            employee.EmployeeList(); 
+                        } 
+                    },
+                    error:function(error){
+                        alert("Error while creating employee");
+                    }
+                });
+           },
+    }; 
+    
+    employee.EmployeeList();
+</script>

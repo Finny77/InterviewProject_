@@ -1,0 +1,61 @@
+﻿ 
+@{
+    
+    ViewData["Title"] = "Employee List";
+}
+@{
+    if (ViewBag.Error != "")
+    {
+        <h3>ViewBag.Error</h3>
+    }
+}
+<link href="~/css/employee.css" rel="stylesheet" />
+<div class="row"> 
+    <div class="col-md-12" style="text-align:right;">
+        <a class="btn btn-primary" href="/Employee/CreateEmployee" >
+            Create
+        </a>
+    </div>
+    <br />
+    <br />
+    <div class="col-md-12">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Employee Name</td>
+                    <td>Designation</td>
+                    <td>EmailAddress</td>
+                    <td>MobilePhone</td>
+                    <td>DateOfBirth</td>
+                    <td>Nationality</td>
+                    <td>IsActive</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach ( var items in Model)
+                    { 
+                        <tr>
+                            <td>@items.EmployeeId</td>
+                            <td>@items.EmployeeName</td>
+                            <td>@items.Designation</td>
+                            <td>@items.EmailAddress</td>
+                            <td>@items.MobilePhone</td>
+                            <td>@items.DateOfBirth</td>
+                            <td>@items.Nationality</td>
+                            <td>@items.IsActive</td>
+                            <td>
+                                <span><a class="btn btn-primary btn-sm" href="/Employee/CreateEmployee?Id=@items.EmployeeId">Edit</a></span>
+                                <span><a class="btn btn-primary btn-sm">Delete</a></span>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="~/js/employee.js"></script>
