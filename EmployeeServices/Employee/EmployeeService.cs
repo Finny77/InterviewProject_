@@ -48,13 +48,14 @@ namespace EmployeeServices.Employee
                 {
                     _employeeContext.Employee.Remove(emp);
                     _employeeContext.SaveChanges();
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 return false;
             }
-            return true;
+            return false;
         }
     }
 }

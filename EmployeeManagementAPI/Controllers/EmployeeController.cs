@@ -64,14 +64,19 @@ namespace EmployeeManagementAPI.Controllers
                 return Ok(new { status = false, message = "Error while getting data." });
             }
         }
-        [HttpGet("DeleteEmployee")]
+        [HttpDelete("DeleteEmployee/{id}")]
         public IActionResult DeleteEmployee(int Id)
         {
             try
             {
 
                 bool status = _employeeService.DeleteEmployee(Id);
-                return Ok(new { status });
+                if(status==false)
+                    return BadRequest(new { status });
+                else
+                    return Ok(new { status });
+
+
             }
             catch (Exception ex)
             { 

@@ -28,6 +28,15 @@ namespace EmployeeTest.API
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
             Assert.That((bool)result.status, Is.True);
         }
+        [TestCase(1, 200)]   
+        [TestCase(0, 400)] 
+        public async Task DeleteEmployee_ReturnsCorrectStatus(int id, int expectedStatus)
+        {
+            var response = await _client.DeleteAsync("/api/Employee/DeleteEmployee/{id}");
+             
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatus),
+                $"Failed for ID {id}. Expected {expectedStatus} but got {response.StatusCode}");
+        }
 
     }
 }

@@ -27,6 +27,27 @@ namespace EmployeeTest.Web
             var model = result.Model as List<EmployeeModel>;
             Assert.That(model.Count, Is.EqualTo(2));
         }
-        
+        [Test]
+        public void Create_ValidEmployee_ShouldRedirectToIndex()
+        { 
+            var employee = EmployeeTestData.ValidEmployee();
+            _mockService.Setup(s => s.CreateEmployee(employee)).Returns(true);
+            var result = _controller.CreateEmployee(employee) as JsonResult;
+
+            var property = result.Value.GetType().GetProperty("status");
+            var statusValue = (bool)property.GetValue(result.Value);
+
+            Assert.That(statusValue, Is.True);
+        }
+        [Test]
+        public void Delete_InvalidId_ShouldReturnNotFound()
+        {
+            var result = _controller.DeleteEmployee(2233) as JsonResult;
+
+            var property = result.Value.GetType().GetProperty("status");
+            var statusValue = (bool)property.GetValue(result.Value);
+
+            Assert.That(statusValue, Is.False);
+        }
     }
 }

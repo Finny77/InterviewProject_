@@ -7,8 +7,7 @@ END
 USE EmployeeManagement
 
 IF NOT EXISTS(SELECT * FROM sys.tables WHERE NAME ='Employee')
-BEGIN 
-PRINT 4
+BEGIN  
 CREATE TABLE Employee(
 EmployeeId INT IDENTITY(1,1) NOT NULL,
 EmployeeName  NVARCHAR(200) NOT NULL,
@@ -24,5 +23,3 @@ END
 
 ALTER TABLE Employee
 ADD CONSTRAINT Default_CreatedDate  DEFAULT(GETDATE()) FOR CreatedDate
- 
-  
