@@ -7,7 +7,8 @@ namespace EmployeeTest
 {
     public static class EmployeeTestData
     {
-        public static EmployeeModel ValidEmployee(EmployeeModel Model) { 
+        public static EmployeeModel ValidEmployee() {
+            EmployeeModel Model= new EmployeeModel();
             Model.EmployeeName = "Finny J";
             Model.EmailAddress = "john@test.com";
             Model.Designation = "Developer";

@@ -21,7 +21,7 @@ namespace EmployeeManagement.Controllers
             catch (Exception ex)
             {
 
-                return View(ViewBag.Error="Error while fetching data");
+                return View();
             }
         }
         [HttpGet]

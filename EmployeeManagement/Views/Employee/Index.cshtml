@@ -3,12 +3,7 @@
     
     ViewData["Title"] = "Employee List";
 }
-@{
-    if (ViewBag.Error != "")
-    {
-        <h3>ViewBag.Error</h3>
-    }
-}
+ 
 <link href="~/css/employee.css" rel="stylesheet" />
 <div class="row"> 
     <div class="col-md-12" style="text-align:right;">
@@ -19,9 +14,8 @@
     <br />
     <br />
     <div class="col-md-12">
-        
-        <table class="table">
-            <thead>
+        <table class="table table-bordered table-hover table-striped align-middle shadow-sm">
+            <thead class=" text-center">
                 <tr>
                     <td>Id</td>
                     <td>Employee Name</td>
@@ -46,10 +40,12 @@
                             <td>@items.MobilePhone</td>
                             <td>@items.DateOfBirth</td>
                             <td>@items.Nationality</td>
-                            <td>@items.IsActive</td>
                             <td>
-                                <span><a class="btn btn-primary btn-sm" href="/Employee/CreateEmployee?Id=@items.EmployeeId">Edit</a></span>
-                                <span><a class="btn btn-primary btn-sm">Delete</a></span>
+                                @(items.IsActive ? "Active" : "Inactive")
+                            </td>
+                            <td>
+                                <span><a class=" " href="/Employee/CreateEmployee?Id=@items.EmployeeId">Edit</a></span>
+                                <span><a class="">Delete</a></span>
                             </td>
                         </tr>
                     }
